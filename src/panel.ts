@@ -2,7 +2,20 @@ console.log("START: panel.js");
 
 const panel_window = window as PanelWindow;
 
+panel_window.onRequest = request => {
+    console.log("ON REQUEST", request);
+}
+
+panel_window.onNavigation = url => {
+    console.log("ON NAVIGATION", url);
+};
+
+/*
+
+// NOTE: don't need this for now - might need it to communicate with "background.js"
+
 panel_window.do_something = (msg: string) => {
+    console.log("DOING SOMETHING");
     document.body.textContent += '\n' + msg; // Stupid example, PoC
 }
 
@@ -11,6 +24,7 @@ document.documentElement.onclick = function() {
     // the panel can only be clicked when it's visible...
     panel_window.respond('Another stupid example!');
 };
+*/
 
 // chrome.devtools.network.onRequestFinished.addListener(request => {
 //     console.log("REQUEST", request);

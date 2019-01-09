@@ -1,3 +1,9 @@
+/*
+
+// NOTE: this is unused at the moment.
+//       if we need this later, add this to the manifest:
+//       "background": { "scripts": ["background.js"] }
+
 console.log("START: background.js");
 
 let ports: chrome.runtime.Port[] = [];
@@ -36,3 +42,4 @@ function notifyDevtools(msg: string) {
 // chrome.devtools.network.onRequestFinished.addListener(request => {
 //     console.log("REQUEST", request);
 // });
+*/

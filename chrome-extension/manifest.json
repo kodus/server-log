@@ -3,8 +3,5 @@
     "version": "1.0.0",
     "manifest_version": 2,
     "description": "Devtools panel for aggregation of diagnostic logs from the server",
-    "devtools_page": "devtools.html",
-    "background": {
-        "scripts": ["background.js"]
-    }
+    "devtools_page": "devtools.html"
 }
