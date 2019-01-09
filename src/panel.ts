@@ -1,14 +1,76 @@
-console.log("START: panel.js");
+class LogEntry extends HTMLElement {
+    private shadow: ShadowRoot;
 
-const panel_window = window as PanelWindow;
+    constructor() {
+        super();
 
-panel_window.onRequest = request => {
-    console.log("ON REQUEST", request);
+        this.shadow = this.attachShadow({ mode: "open" });
+    }
+
+    setHTML(html: string) {
+        let doc = new DOMParser().parseFromString(html, "text/html");
+
+        this.style.display = "block";
+
+        [...doc.head.querySelectorAll("style")].forEach(
+            style => this.shadow.appendChild(style));
+
+        [...doc.body.childNodes].forEach(
+            node => this.shadow.appendChild(node));
+    }
 }
 
-panel_window.onNavigation = url => {
-    console.log("ON NAVIGATION", url);
-};
+customElements.define("log-entry", LogEntry);
+
+((panel: PanelWindow) => {
+
+    console.log("START: panel.js");
+
+    const $content = document.body.querySelector<HTMLElement>("[data-content]")!;
+
+    panel.onRequest = request => {
+        console.log("ON REQUEST", request);
+
+        appendContent(loadDocument((request as any).request.url))
+    }
+
+    panel.onNavigation = url => {
+        console.log("ON NAVIGATION", url);
+
+        $content.innerHTML = "";
+
+        appendContent(Promise.resolve(`<h1>${url}</h1>`));
+    };
+
+    function appendContent(html: Promise<string>) {
+        const el = document.createElement("log-entry") as LogEntry;
+
+        $content.appendChild(el);
+
+        html.then(html => el.setHTML(html));
+    }
+    
+    // TODO load real content
+
+    const loadDocument = (url: string) => new Promise<string>(resolve => resolve(`
+    <!DOCTYPE html>
+    <html>
+    
+    <head>
+      <title>Hello</title>
+      <style>
+        h2 { color: red; }
+      </style>
+    </head>
+    
+    <body>
+      <h2>${url}</h2>
+    </body>
+    
+    </html>
+    `));
+    
+})(window as PanelWindow);
 
 /*
 
@@ -25,61 +87,3 @@ document.documentElement.onclick = function() {
     panel_window.respond('Another stupid example!');
 };
 */
-
-// chrome.devtools.network.onRequestFinished.addListener(request => {
-//     console.log("REQUEST", request);
-// });
-
-
-// customElements.define(
-//     "log-entry",
-//     class LogEntryElement extends HTMLElement {
-//         constructor() {
-//             super();
-//
-//             this.attachShadow({ mode: "open" });
-//         }
-//
-//         load(html) {
-//             let doc = new DOMParser().parseFromString(html, "text/html");
-//
-//             this.style.display = "block";
-//
-//             [...doc.head.querySelectorAll("style")].forEach(
-//                 style => this.shadowRoot.appendChild(style));
-//
-//             [...doc.body.childNodes].forEach(
-//                 node => this.shadowRoot.appendChild(node));
-//         }
-//     }
-// );
-//
-// function load(html) {
-//     let el = document.createElement("log-entry");
-//
-//     el.load(html);
-//
-//     document.body.appendChild(el);
-// }
-//
-// const sample = color => `
-// <!DOCTYPE html>
-// <html>
-//
-// <head>
-//   <title>Hello</title>
-//   <style>
-//     h1 { color: ${color}; }
-//   </style>
-// </head>
-//
-// <body>
-//   <h1>Hello World</h1>
-// </body>
-//
-// </html>
-// `;
-//
-// load(sample("red"));
-// load(sample("green"));
-// load(sample("blue"));
