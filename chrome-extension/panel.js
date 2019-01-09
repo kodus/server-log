@@ -1,8 +1,18 @@
-console.log("HELLO PANEL");
+console.log("START: panel.js");
 
-chrome.devtools.network.onRequestFinished.addListener(request => {
-    console.log("REQUEST", request);
-});
+function do_something(msg) {
+    document.body.textContent += '\n' + msg; // Stupid example, PoC
+}
+
+document.documentElement.onclick = function() {
+    // No need to check for the existence of `respond`, because
+    // the panel can only be clicked when it's visible...
+    respond('Another stupid example!');
+};
+
+// chrome.devtools.network.onRequestFinished.addListener(request => {
+//     console.log("REQUEST", request);
+// });
 
 
 // customElements.define(
