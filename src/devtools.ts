@@ -2,6 +2,9 @@
 
     /**
      * This script runs in the background as soon as Devtools is opened.
+     * 
+     * We push actions temporarily to a queue, until the panel is opened, to avoid
+     * loading and processing of content that won't be visible to the user anyway.
      */
 
     console.log("START: devtools.js");
@@ -41,7 +44,7 @@
     });
     
     chrome.devtools.network.onRequestFinished.addListener(request => {
-        console.log("REQUEST", request);
+        // console.log("REQUEST", request);
     
         queue(panel => panel.onRequest(request));
     });

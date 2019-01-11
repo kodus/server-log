@@ -1,3 +1,6 @@
+import { renderLog, Log } from "./log.js";
+import { Request, Response } from "har-format";
+
 class LogEntry extends HTMLElement {
     private shadow: ShadowRoot;
 
@@ -28,10 +31,26 @@ customElements.define("log-entry", LogEntry);
 
     const $content = document.body.querySelector<HTMLElement>("[data-content]")!;
 
-    panel.onRequest = request => {
-        console.log("ON REQUEST", request);
+    panel.onRequest = transaction => {
+        console.log("ON REQUEST", transaction);
 
-        appendContent(loadDocument((request as any).request.url))
+        const request = (transaction as any).request as Request;
+        const response = (transaction as any).response as Response;
+
+        for (let header of response.headers) {
+            const name = header.name.toLowerCase();
+
+            if (name === "x-chromelogger-data") {
+                try {
+                    const log = JSON.parse(atob(header.value));
+                    console.log("PARSE LOG", log);
+
+                    appendContent(Promise.resolve(renderLog(log as Log)));
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
     }
 
     panel.onNavigation = url => {
@@ -49,26 +68,6 @@ customElements.define("log-entry", LogEntry);
 
         html.then(html => el.setHTML(html));
     }
-    
-    // TODO load real content
-
-    const loadDocument = (url: string) => new Promise<string>(resolve => resolve(`
-    <!DOCTYPE html>
-    <html>
-    
-    <head>
-      <title>Hello</title>
-      <style>
-        h2 { color: red; }
-      </style>
-    </head>
-    
-    <body>
-      <h2>${url}</h2>
-    </body>
-    
-    </html>
-    `));
     
 })(window as PanelWindow);
 

@@ -8,12 +8,16 @@ body {
   overflow: hidden;
   margin: 0;
   padding: 0;
+  
+  font-family: 'Segoe UI', Tahoma, 'Helvetica Neue', 'Lucida Grande', Roboto, Ubuntu, Arial, sans-serif;
+  font-size: 12px;
+  color: #222;
 
   /**
    * Vars and CSS lifted from devtools sources:
    * 
-   * https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/ui/inspectorStyle.css
-   * https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/ui/filter.css
+   *     https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/ui/inspectorStyle.css
+   *     https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/ui/filter.css
    */
 
   --toolbar-bg-color: #f3f3f3;

@@ -7,6 +7,10 @@ This extension for Chrome aggregates diagnostic logs from the server-side to a p
 
 TODO
 
+### Server-side Integration
+
+TODO
+
 ### Specification
 
 The server-side specifies the location of one or more HTML resources by adding an
@@ -20,6 +24,39 @@ and the content will be displayed in the "Server Log" panel in Devtools.
 The resource specified by the header must be a simple, self-contained HTML5 document - use
 the `<style>` tag in the `<head>` of your document to style the content in the `<body>` element.
 
+### Development
+
+TypeScript sources are compiled from `src` to the `chrome-extension` folder.
+
+Note that other (HTML, CSS) files in the `chrome-extension` folder should be edited
+directly - only the TypeScript sources are compiled from `src`.
+
+If you want to hack on the extension, this will get you started:
+
+    npm install
+    npm run watch
+
+To compile before check-in:
+
+    npm run build
+
+If you haven't worked on a Chrome extension before, [start here](https://developer.chrome.com/extensions/getstarted).
+
+Please submit pull-requests *without* the compiled `.js` files checked-in - we'll rebuild
+the compiled source upon accepting your PR and/or publishing a release.
+
+### Roadmap
+
+This is an early version - here are some of the features we'd like to add:
+
+  * [ ] Legacy support for ChromeLogger headers (for your existing projects)
+  * [ ] Support for ChromeLogger JSON data delivered as a file (for progressive adoption)
+  * [ ] Support for external resources in HTML files:
+    * [ ] Support for external Javascript via `<script>` tags in `<head>` or `<body>`.
+    * [ ] Support for external CSS via `<link rel="stylesheet">` in `<head>`.
+
+Pull-requests welcome :-)
+
 ### Meta
 
 If you've used ChromeLogger, you might have one or more of the following questions.
@@ -29,7 +66,7 @@ If you've used ChromeLogger, you might have one or more of the following questio
 A JSON/XML schema is considerably more complexity, and HTML provides more freedom in terms
 of formatting the content.
 
-*Why not embed directly in headers?*
+*Why not embed documents directly in headers?*
 
 There's a (~250KB) header size limitations in browsers, and often much lower limits on the
 server, which leads to serious problems and/or unfortunate trade-offs such as having to
