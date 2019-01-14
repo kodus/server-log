@@ -5,9 +5,7 @@
   },
   "devDependencies": {
     "@types/chrome": "0.0.77",
+    "@types/har-format": "^1.2.3",
     "typescript": "^3.2.2"
-  },
-  "dependencies": {
-    "@types/har-format": "^1.2.3"
   }
 }

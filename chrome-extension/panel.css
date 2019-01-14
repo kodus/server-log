@@ -45,6 +45,16 @@ body {
   overflow-y: auto;
 }
 
+[class^="icon-"] {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+
+.icon-spinner {
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid' class='lds-rolling' style='background:0 0'%3E%3Ccircle cx='50' cy='50' fill='none' stroke='%23757ed1' stroke-width='15' r='40' stroke-dasharray='188.49555921538757 64.83185307179586' transform='rotate(275.327 50 50)'%3E%3CanimateTransform attributeName='transform' type='rotate' calcMode='linear' values='0 50 50;360 50 50' keyTimes='0;1' dur='0.5s' begin='0s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/svg%3E");
+}
+
 /*
 
 TODO add filter input

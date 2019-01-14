@@ -34,6 +34,10 @@ customElements.define("log-entry", LogEntry);
     panel.onRequest = transaction => {
         console.log("ON REQUEST", transaction);
 
+        // NOTE: weird typecasts required here because the request/response properties
+        //       aren't defined in `@types/chrome` - we have to pull these definitions
+        //       from a separate package `@types/har-format` and manually cast:
+
         const request = (transaction as any).request as Request;
         const response = (transaction as any).response as Response;
 
