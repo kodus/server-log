@@ -3,5 +3,8 @@
     "version": "1.0.0",
     "manifest_version": 2,
     "description": "Devtools panel for aggregation of diagnostic logs from the server",
-    "devtools_page": "devtools.html"
+    "devtools_page": "devtools.html",
+    "permissions": [
+        "<all_urls>"
+    ]
 }
