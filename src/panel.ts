@@ -59,7 +59,7 @@ customElements.define("log-entry", LogEntry);
             const name = header.name.toLowerCase();
 
             if (name === "x-chromelogger-data") {
-                appendLog(title, "X-ChromeLogger-Data", new Promise(resolve => {
+                appendLog(title, "X-ChromeLogger-Data", new Promise((resolve, reject) => {
                     try {
                         const log = JSON.parse(atob(header.value));
 
@@ -67,7 +67,7 @@ customElements.define("log-entry", LogEntry);
 
                         resolve(renderLog(log as Log));
                     } catch (error) {
-                        throw `Error parsing X-ChromeLogger-Data header (${error})`;
+                        reject(`Error parsing X-ChromeLogger-Data header (${error})`);
                     }
                 }));
             }
