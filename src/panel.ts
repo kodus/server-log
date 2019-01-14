@@ -53,7 +53,7 @@ customElements.define("log-entry", LogEntry);
         const request = (transaction as any).request as Request;
         const response = (transaction as any).response as Response;
 
-        const title = `${request.method} ${request.url} [${response.status} ${response.statusText}]`;
+        const title = `[${response.status} ${response.statusText}] ${request.method} ${request.url}`;
 
         for (let header of response.headers) {
             const name = header.name.toLowerCase();
