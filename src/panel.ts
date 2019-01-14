@@ -1,6 +1,11 @@
 import { renderLog, Log } from "./log.js";
 import { Request, Response } from "har-format";
 
+type Icon = "spinner" | "error" | "check" | undefined;
+
+/**
+ * This custom element allows us to isolate server-side log pages in a shadow-root.
+ */
 class LogEntry extends HTMLElement {
     private shadow: ShadowRoot;
 
@@ -31,6 +36,13 @@ customElements.define("log-entry", LogEntry);
 
     const $content = document.body.querySelector<HTMLElement>("[data-content]")!;
 
+    panel.onNavigation = url => {
+        console.log("ON NAVIGATION", url);
+
+        // TODO add "Preserve Log" option (similar to the "Network" tab)
+        $content.innerHTML = "";
+    };
+
     panel.onRequest = transaction => {
         console.log("ON REQUEST", transaction);
 
@@ -41,36 +53,89 @@ customElements.define("log-entry", LogEntry);
         const request = (transaction as any).request as Request;
         const response = (transaction as any).response as Response;
 
+        const title = `${request.method} ${request.url} [${response.status} ${response.statusText}]`;
+
         for (let header of response.headers) {
             const name = header.name.toLowerCase();
 
             if (name === "x-chromelogger-data") {
-                try {
-                    const log = JSON.parse(atob(header.value));
-                    console.log("PARSE LOG", log);
+                appendLog(title, "X-ChromeLogger-Data", new Promise(resolve => {
+                    try {
+                        const log = JSON.parse(atob(header.value));
 
-                    appendContent(Promise.resolve(renderLog(log as Log)));
-                } catch (e) {
-                    console.error(e);
-                }
+                        console.log("PARSED CHROME-LOGGER HEADER", log);
+
+                        resolve(renderLog(log as Log));
+                    } catch (error) {
+                        throw `Error parsing X-ChromeLogger-Data header (${error})`;
+                    }
+                }));
             }
         }
     }
 
-    panel.onNavigation = url => {
-        console.log("ON NAVIGATION", url);
+    /**
+     * Append a log document to the "Server Log" panel
+     */
+    function appendLog(title: string, source: string, documentPromise: Promise<string>) {
+        const header = appendHeader("spinner", title, source);
 
-        $content.innerHTML = "";
-
-        appendContent(Promise.resolve(`<h1>${url}</h1>`));
-    };
-
-    function appendContent(html: Promise<string>) {
         const el = document.createElement("log-entry") as LogEntry;
 
         $content.appendChild(el);
 
-        html.then(html => el.setHTML(html));
+        documentPromise
+            .then(html => {
+                el.setHTML(html);
+
+                header.setIcon("check");
+            })
+            .catch(error => {
+                el.setHTML(`<pre style="color:red; padding-left:20px;">${html(error)}</pre>`);
+
+                header.setIcon("error");
+            });
+    }
+
+    /**
+     * Create a header with an icon, title and source of the request
+     */
+    function appendHeader(icon: Icon, title: string, source: string) {
+        const el = document.createElement("div");
+
+        el.innerHTML = (`
+            <div class="header ${icon ? `header--${icon}` : ``}">
+                <div class="header__icon">${
+                    icon ? `<span class="icon"></span>` : ``
+                }</div>
+                <div class="header__title">${html(title)}</div>
+                <div class="header__source">${html(source)}</div>
+            </div>`
+        );
+
+        $content.appendChild(el);
+
+        function setIcon(icon: Icon) {
+            el.querySelector(".icon")!.className = `icon icon-${icon}`;
+        };
+
+        setIcon(icon);
+
+        return {
+            setIcon
+        };
+    }
+        
+    /**
+     * Escape plain text as HTML
+     */
+    function html(str: string | null | undefined): string {
+        return (str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     }
     
 })(window as PanelWindow);

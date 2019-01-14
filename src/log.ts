@@ -1,17 +1,29 @@
-// This module implements backwards compatibility with ChromeLogger data.
+/**
+ * This module implements backwards compatibility with ChromeLogger data, by rendering
+ * a console-like HTML page on the client-side.
+ */
 
+/**
+ * This loosely defines ChromeLogger's "packed" log-data format
+ */
 export interface Log {
     version: string;
     columns: string[];
     rows: Array<any>;
 }
 
+/**
+ * We normalize ChromeLogger's "packed" format to this format
+ */
 interface Row {
     log: any;
     type: "log" | "info" | "warn" | "error" | "group" | "groupEnd" | "groupCollapsed" | "table";
     backtrace: string | undefined;
 }
 
+/**
+ * These are the available icons defined in the CSS
+ */
 type Icon = "info" | "warning" | "error" | "collapse" | undefined;
 
 /**
@@ -47,23 +59,6 @@ export function renderLog(log: Log): string {
         <html>
         <head>
         <style>
-        /**
-         * Icons lifted from devtools here:
-         * 
-         *     https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/Images/smallIcons.png
-         *
-         * If you need more, extract them using MethodDraw:
-         *
-         *     https://editor.method.ac/
-         *
-         * Then compress them:
-         *
-         *     https://jakearchibald.github.io/svgomg/
-         * 
-         * And URL-encode them:
-         *
-         *     https://yoksel.github.io/url-encoder/
-         */
 
         pre {
             margin: 0;

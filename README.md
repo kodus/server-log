@@ -49,6 +49,12 @@ If you haven't worked on a Chrome extension before, [start here](https://develop
 Please submit pull-requests *without* the compiled `.js` files checked-in - we'll rebuild
 the compiled source upon accepting your PR and/or publishing a release.
 
+#### Icons
+
+Icons were lifted from Devtools [here](https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/Images/smallIcons.png) -
+if you need more, extract them using [MethodDraw](https://editor.method.ac/), compress them
+with [SVGOMG](https://jakearchibald.github.io/svgomg/), and [URL-encode](https://yoksel.github.io/url-encoder/) them.
+
 ### Roadmap
 
 This is an early version - here are some of the features we'd like to add:
