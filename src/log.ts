@@ -72,29 +72,29 @@ export function renderLog(log: Log): string {
     font-size: 12px !important;
 }
 
-.log-entry {
+.log-item {
     display: flex;
     padding: 4px 4px 3px 4px;
     border-bottom: solid 1px #e8e8e8;
 }
 
-.log-entry--warning {
+.log-item--warning {
     background: #fdfbe5;
 }
 
-.log-entry--error {
+.log-item--error {
     background: #fbf0f0;
 }
 
-.log-entry__icon {
+.log-item__icon {
     width: 15px;
 }
 
-.log-entry__message {
+.log-item__content {
     flex: 1 1;
 }
 
-.log-entry__source {
+.log-item__source {
     display: inline-block;
     float: right;
     color: #888;
@@ -130,7 +130,7 @@ function renderLogRows(log: Log): string {
             case "warn":
             case "error":
             default:
-                html.push(renderEntry(ICON_MAP[type], renderData(row.log), row.backtrace));
+                html.push(renderItem(ICON_MAP[type], renderData(row.log), row.backtrace));
         }
     }
 
@@ -143,14 +143,14 @@ function renderData(data: Array<any>): string {
         .join("");
 }
 
-function renderEntry(icon: Icon, content: string, source: string | undefined): string {
+function renderItem(icon: Icon, content: string, source: string | undefined): string {
     return (`
-<div class="log-entry log-entry--${icon}">
-    <div class="log-entry__icon">${
+<div class="log-item log-item--${icon}">
+    <div class="log-item__icon">${
         icon ? `<span class="icon-${icon}"></span>` : ``
     }</div>
-    <div class="log-entry__message">${content}</div>
-    ${ source ? `<div class="log-entry__source">${html(source)}</div>` : `` }
+    <div class="log-item__content">${content}</div>
+    ${ source ? `<div class="log-item__source">${html(source)}</div>` : `` }
 </div>`
     );
 }
