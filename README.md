@@ -1,19 +1,31 @@
 Server Log Panel
 ================
 
-This extension for Chrome aggregates diagnostic logs from the server-side to a panel in Devtools.
+This extension for Chrome aggregates diagnostic logs (HTML) from the server-side to a panel in Devtools.
 
 Legacy support for [ChromeLogger](https://craig.is/writing/chrome-logger) headers is available for your
 existing projects - if you just want your server-side logs in a separate panel from your client-side JS
 console, you can use this extension as a drop-in replacement for the original extension.
 
+Progressive adoption (to break the header-size limitation of ChromeLogger) is possible with minor changes
+to existing server-side libraries: simply make them output the ChromeLogger JSON data to a file instead
+of via a header, and emit the `X-ServerLog-Location` header with the URL of the JSON file.
+
 ### Usage
 
 TODO
 
-### Server-side Integration
+#### Server-side Libraries
 
-TODO
+Install a server-side library for your language:
+
+  * PHP (with PSR-3/7/15) support via [`kodus/chrome-logger`](https://github.com/kodus/chrome-logger).
+  * Python, Ruby, Node, .NET, Go, Java and more via [ChromeLogger integrations](https://craig.is/writing/chrome-logger).
+
+Consider forking the existing ChromeLogger-libraries and help break the header-size limit - or
+write a new and improved server-side library for your language using fancy HTML!
+
+Tell us about your server-side library, and we'll add it here! :-)
 
 ### Specification
 
@@ -22,13 +34,15 @@ The server-side specifies the location of one or more HTML resources by adding a
 
     X-ServerLog-Location: /log/938b6caf-2787-43c3-8cf9-1d6669f0537a.html
 
+The URL is relative to the page that emitted the header.
+
 When the extension detects one or more of these headers, the HTML resource(s) will be fetched
 and the content will be displayed in the "Server Log" panel in Devtools.
 
 The resource specified by the header must be a simple, self-contained HTML5 document - use
 the `<style>` tag in the `<head>` of your document to style the content in the `<body>` element.
 
-### Development
+### Contributing
 
 TypeScript sources are compiled from `src` to the `chrome-extension` folder.
 
@@ -55,11 +69,10 @@ Icons were lifted from Devtools [here](https://github.com/ChromeDevTools/devtool
 if you need more, extract them using [MethodDraw](https://editor.method.ac/), compress them
 with [SVGOMG](https://jakearchibald.github.io/svgomg/), and [URL-encode](https://yoksel.github.io/url-encoder/) them.
 
-### Roadmap
+#### Roadmap
 
-This is an early version - here are some of the features we'd like to add:
+Here are some of the features we'd like to add:
 
-  * [ ] Support for ChromeLogger JSON data delivered as a file (for progressive adoption)
   * [ ] Support for external resources in HTML files:
     * [ ] Support for external Javascript via `<script>` tags in `<head>` or `<body>`.
     * [ ] Support for external CSS via `<link rel="stylesheet">` in `<head>`.

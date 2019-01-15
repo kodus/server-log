@@ -146,6 +146,27 @@ export function renderLog(log: Log): string {
             background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='none' d='M-1-1h12v12H-1z'/%3E%3Cg%3E%3Cpath d='M4.5 8L8 2H1'/%3E%3C/g%3E%3C/svg%3E");
         }
 
+        table {
+            display: inline-block;
+            padding: 8px 0;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            border: solid 1px #b3b6bd;
+            padding: 4px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        
+        th {
+            background: #d0ebfb;
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #f3f3f3;
+        }          
+
         </style>
         </head>
         <body>
@@ -179,7 +200,6 @@ function renderLogRows(log: Log): string {
     for (let row of parseLog(log)) {
         console.log(row);
         const type = row.type;
-        const content = renderData(row.log);
 
         switch (type) {
             case "log":
@@ -187,15 +207,15 @@ function renderLogRows(log: Log): string {
             case "warn":
             case "error":
             default:
-                append(renderItem(ICON_MAP[type], content, row.backtrace));
+                append(renderItem(ICON_MAP[type], renderData(row.log), row.backtrace));
                 break;
             
             case "group":
-                startGroup(content, false);
+                startGroup(renderData(row.log), false);
                 break;
 
             case "groupCollapsed":
-                startGroup(content, true);
+                startGroup(renderData(row.log), true);
                 break;
 
             case "groupEnd":
@@ -203,7 +223,7 @@ function renderLogRows(log: Log): string {
                 break;
 
             case "table":
-                //  TODO
+                append(renderTable(row.log[0]));
                 break;
         }
     }
@@ -253,6 +273,38 @@ const renderGroup = (() => {
         `);
     }
 })();
+
+/**
+ * Render log-data as a table
+ */
+function renderTable(rows: Array<{ [key: string]: any }>): string {
+    try {
+        let unique_keys: { [key: string]: true } = {};
+
+        for (let row of rows) {
+            for (let key of Object.keys(row)) {
+                unique_keys[key] = true;
+            }
+        }
+
+        const keys = Object.keys(unique_keys);
+        
+        return `
+            <div class="table"><table>
+                <thead>
+                    ${keys.map(key => `<th>${html(key)}</th>`).join("")}
+                </head>
+                <tbody>
+                    ${rows.map(row => `<tr>${keys.map(key => `<td>${row[key]}</td>`).join("")}</tr>`).join("\n")}
+                </tbody>
+            </table></div>
+        `;
+    } catch (error) {
+        console.error(`Error rendering table data: ${error}`, rows);
+
+        return renderData(rows);
+    }
+}
 
 /**
  * Escape plain text as HTML
