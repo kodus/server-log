@@ -6,5 +6,9 @@
     "devtools_page": "devtools.html",
     "permissions": [
         "<all_urls>"
-    ]
+    ],
+    "browser_action": {
+        "default_title": "Server Log",
+        "default_popup": "about.html"
+    }
 }

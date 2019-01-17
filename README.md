@@ -13,7 +13,12 @@ of via a header, and emit the `X-ServerLog-Location` header with the URL of the 
 
 ### Usage
 
-TODO
+Open Devtools (F12) and look for the new "Server Log" tab.
+
+During development, your server-side scripts can emit headers and logs (in HTML format) to be displayed
+in the "Server Log" panel.
+
+See below for available server-side libraries or how to build your own.
 
 #### Server-side Libraries
 
@@ -32,7 +37,7 @@ Tell us about your server-side library, and we'll add it here! :-)
 The server-side specifies the location of one or more HTML resources by adding an
 `X-ServerLog-Location` header to an HTTP Response - for example:
 
-    X-ServerLog-Location: /log/938b6caf-2787-43c3-8cf9-1d6669f0537a.html
+    X-ServerLog-Location: /server-log/938b6caf-2787-43c3-8cf9-1d6669f0537a.html
 
 The URL is relative to the page that emitted the header.
 
@@ -63,21 +68,24 @@ If you haven't worked on a Chrome extension before, [start here](https://develop
 Please submit pull-requests *without* the compiled `.js` files checked-in - we'll rebuild
 the compiled source upon accepting your PR and/or publishing a release.
 
-#### Icons
-
-Icons were lifted from Devtools [here](https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/Images/smallIcons.png) -
-if you need more, extract them using [MethodDraw](https://editor.method.ac/), compress them
-with [SVGOMG](https://jakearchibald.github.io/svgomg/), and [URL-encode](https://yoksel.github.io/url-encoder/) them.
-
 #### Roadmap
 
 Here are some of the features we'd like to add:
 
+  * [ ] Add toolbar similar to the "Network" panel:
+    * [ ] Add button to manually clear the log.
+    * [ ] Add "Preserve Log" option to toggle clearing the log on navigation; unchecked by default.
   * [ ] Support for external resources in HTML files:
     * [ ] Support for external Javascript via `<script>` tags in `<head>` or `<body>`.
     * [ ] Support for external CSS via `<link rel="stylesheet">` in `<head>`.
 
 Pull-requests welcome :-)
+
+#### Icons
+
+Icons were lifted from Devtools [here](https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/Images/smallIcons.png) -
+if you need more, extract them using [MethodDraw](https://editor.method.ac/), compress them
+with [SVGOMG](https://jakearchibald.github.io/svgomg/), and [URL-encode](https://yoksel.github.io/url-encoder/) them.
 
 ### Meta
 

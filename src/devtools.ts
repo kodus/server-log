@@ -50,7 +50,7 @@
     });
     
     chrome.devtools.panels.create("Server Log", "toolbar-icon.png", "panel.html", panel => {
-        console.log("CREATE PANEL");
+        console.log("CREATE PANEL", panel);
 
         panel.onShown.addListener(function onShowPanel(window) {
             console.log("SHOW PANEL");
