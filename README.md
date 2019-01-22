@@ -68,19 +68,6 @@ If you haven't worked on a Chrome extension before, [start here](https://develop
 Please submit pull-requests *without* the compiled `.js` files checked-in - we'll rebuild
 the compiled source upon accepting your PR and/or publishing a release.
 
-#### Roadmap
-
-Here are some of the features we'd like to add:
-
-  * [ ] Add toolbar similar to the "Network" panel:
-    * [ ] Add button to manually clear the log.
-    * [ ] Add "Preserve Log" option to toggle clearing the log on navigation; unchecked by default.
-  * [ ] Support for external resources in HTML files:
-    * [ ] Support for external Javascript via `<script>` tags in `<head>` or `<body>`.
-    * [ ] Support for external CSS via `<link rel="stylesheet">` in `<head>`.
-
-Pull-requests welcome :-)
-
 #### Icons
 
 Icons were lifted from Devtools [here](https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/Images/smallIcons.png) -
