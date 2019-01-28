@@ -3,6 +3,8 @@ Server Log Panel
 
 This extension for Chrome aggregates diagnostic logs (HTML) from the server-side to a panel in Devtools.
 
+[![screenshot](screenshot.png)](https://chrome.google.com/webstore/detail/server-log/lophlnbmepajcpfhafaciibembckdpih)
+
 Legacy support for [ChromeLogger](https://craig.is/writing/chrome-logger) headers is available for your
 existing projects - if you just want your server-side logs in a separate panel from your client-side JS
 console, you can use this extension as a drop-in replacement for the original extension.
