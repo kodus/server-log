@@ -73,27 +73,29 @@ customElements.define("log-entry", LogEntry);
             }
 
             if (name === "x-serverlog-location") {
-                const url = new URL(header.value, request.url).href;
+                header.value.split(",").map(value => value.trim()).forEach(value => {
+                    const url = new URL(value, request.url).href;
 
-                appendLog(title, url, new Promise((resolve, reject) => {
-                    fetch(url, {
-                        headers: new Headers({
-                            "Accept": "text/html, application/json"
-                        })
-                    }).then(log_response => {
-                        let type = log_response.headers.get("Content-Type");
+                    appendLog(title, url, new Promise((resolve, reject) => {
+                        fetch(url, {
+                            headers: new Headers({
+                                "Accept": "text/html, application/json"
+                            })
+                        }).then(log_response => {
+                            let type = log_response.headers.get("Content-Type");
 
-                        if ((type && type.match(/^text\/html/) || (!type && url.match(/\.html$/)))) {
-                            console.log("FETCH HTML");
-                            resolve(log_response.text());
-                        } else {
-                            console.log("FETCH JSON");
-                            resolve(log_response.json().then(json => renderLog(json)));
-                        }
-                    }).catch(error => {
-                        reject(`Unable to load server-log from: ${url} (${error})`);
-                    });
-                }));
+                            if ((type && type.match(/^text\/html/) || (!type && url.match(/\.html$/)))) {
+                                console.log("FETCH HTML");
+                                resolve(log_response.text());
+                            } else {
+                                console.log("FETCH JSON");
+                                resolve(log_response.json().then(json => renderLog(json)));
+                            }
+                        }).catch(error => {
+                            reject(`Unable to load server-log from: ${url} (${error})`);
+                        });
+                    }));
+                });
             }
         }
     }
